@@ -1,0 +1,20 @@
+FROM python:3.11-slim
+#python:3.11-slim est une image de base légère de Python 3.11
+
+WORKDIR /app
+#WORKDIR /app définit le répertoire de travail dans le conteneur à /app, où les fichiers de l'application seront placés.
+
+RUN pip install --no-cache-dir \
+    kafka-python==2.0.2 \
+    requests==2.31.0
+#RUN pip install --no-cache-dir kafka-python==2.0.2 requests==2.31.0 
+#installe les bibliothèques nécessaires pour le producteur Kafka et les requêtes HTTP, 
+#sans utiliser le cache pour réduire la taille de l'image.
+
+COPY producer.py /app/producer.py
+#COPY producer.py /app/producer.py copie le fichier producer.py de 
+#votre machine locale vers le répertoire /app dans le conteneur.
+
+CMD ["python", "/app/producer.py"]
+#CMD ["python", "/app/producer.py"] définit la commande par défaut à exécuter lorsque le conteneur démarre,
+#qui est d'exécuter le script producer.py pour démarrer le producteur Kafka.
