@@ -1,52 +1,75 @@
-#  Sénégal Environmental Monitoring Pipeline
+# 🌍 Sénégal Environmental Monitoring Pipeline
 
-Pipeline Big Data temps réel : scraping météo → Kafka → MinIO (Parquet) → Dashboard.
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
+![Kafka](https://img.shields.io/badge/Apache_Kafka-231F20?style=flat&logo=apachekafka&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
+![MinIO](https://img.shields.io/badge/MinIO-C72E49?style=flat&logo=minio&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat&logo=streamlit&logoColor=white)
+![Parquet](https://img.shields.io/badge/Parquet-50ABF1?style=flat&logo=apache&logoColor=white)
 
-## Architecture
+> Pipeline Big Data temps réel de monitoring environnemental au Sénégal.  
+> Scraping météo → Kafka (3 brokers) → MinIO (Parquet) → Dashboard Streamlit.
+
+---
+
+## 🏗️ Architecture
 
 ```
 Open-Meteo API  ─┐
                   ├──► producer.py ──► Kafka (3 brokers) ──► store_to_minio.py ──► MinIO (Parquet)
-OpenWeatherMap  ─┘                                      └──► app.py (Dashboard Streamlit)
-                                                                      ↑
-                                                              JupyterLab (libre accès)
+OpenWeatherMap  ─┘                                       └──► app.py (Dashboard Streamlit)
+                                                                       ↑
+                                                               JupyterLab (analyse libre)
 ```
 
-## Services
+---
 
-| Service          | Port  | Description                                    |
-|------------------|-------|------------------------------------------------|
-| Kafka broker 1   | 9092  | Broker principal                               |
-| Kafka broker 2   | 9093  | Broker réplique                                |
-| Kafka broker 3   | 9094  | Broker réplique                                |
-| MinIO API        | 9000  | Stockage objet S3-compatible (Parquet)         |
-| MinIO Console    | 9001  | Interface web MinIO                            |
-| Dashboard        | 8501  | Streamlit — visualisation temps réel           |
-| JupyterLab       | 8888  | Notebooks d'analyse (token: dakar2024)         |
+## ⚙️ Services
 
-## Démarrage rapide
+| Service | Port | Description |
+|---------|------|-------------|
+| Kafka broker 1 | 9092 | Broker principal |
+| Kafka broker 2 | 9093 | Broker réplique |
+| Kafka broker 3 | 9094 | Broker réplique |
+| MinIO API | 9000 | Stockage objet S3-compatible (Parquet) |
+| MinIO Console | 9001 | Interface web MinIO |
+| Dashboard | 8501 | Streamlit — visualisation temps réel |
+| JupyterLab | 8888 | Notebooks d'analyse |
+
+---
+
+## 🚀 Démarrage rapide
 
 ```bash
-# 1. Cloner et configurer
-cp .env.example .env   
+# 1. Cloner le repo
+git clone https://github.com/Sirad12/senegal-weather-intelligence.git
+cd senegal-weather-intelligence
 
-# 2. Lancer tous les services
+# 2. Configurer les variables d'environnement
+cp .env.example .env
+
+# 3. Lancer tous les services
 docker compose up --build -d
 
-# 3. Attendre ~30s que Kafka soit healthy, puis vérifier
+# 4. Attendre ~30s que Kafka soit healthy
 docker compose ps
-
-# 4. Accéder aux interfaces
-#  Dashboard  → http://localhost:8501
-#  MinIO      → http://localhost:9001  (minioadmin / minioadmin)
-#  JupyterLab → http://localhost:8888  (token: dakar2024)
 ```
 
-## Structure du projet
+### Accéder aux interfaces
+
+| Interface | URL | Identifiants |
+|-----------|-----|--------------|
+| 📊 Dashboard Streamlit | http://localhost:8501 | — |
+| 🗄️ MinIO Console | http://localhost:9001 | minioadmin / minioadmin |
+| 📓 JupyterLab | http://localhost:8888 | token: dakar2024 |
+
+---
+
+## 📁 Structure du projet
 
 ```
-dakar-monitoring/
-├── .env                        # Variables sensibles 
+senegal-weather-intelligence/
+├── .env                        # Variables sensibles
 ├── .gitignore
 ├── docker-compose.yml
 ├── producer/
@@ -61,13 +84,36 @@ dakar-monitoring/
     └── senegal_analysis_starter.ipynb
 ```
 
-## Buckets MinIO
+---
 
-- **raw-data** : données brutes telles que reçues de Kafka
-- **processed-data** : données nettoyées et validées
+## 🪣 Stockage MinIO
 
-Chemin des fichiers : `{region_code}/{source}/year={Y}/month={M}/day={D}/{HHmmss}.parquet`
+| Bucket | Contenu |
+|--------|---------|
+| `raw-data` | Données brutes telles que reçues de Kafka |
+| `processed-data` | Données nettoyées et validées |
 
-## Topic Kafka
+**Chemin des fichiers :**
+```
+{region_code}/{source}/year={Y}/month={M}/day={D}/{HHmmss}.parquet
+```
 
-- **senegal-meteo** : 3 partitions, réplication factor 3
+---
+
+## 📡 Topic Kafka
+
+- **Topic** : `senegal-meteo`
+- **Partitions** : 3
+- **Réplication factor** : 3
+
+---
+
+## 👩🏾‍💻 Auteure
+
+**Ndeye Sira Dia** — Étudiante en Licence Informatique option Big Data  
+Dakar Institute of Technology · Dakar, Sénégal
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://linkedin.com/in/sira-dia)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/Sirad12)
+
+---
