@@ -28,7 +28,7 @@ OpenWeatherMap  ─┘                                      └──► app.py 
 
 ```bash
 # 1. Cloner et configurer
-cp .env.example .env   # ou éditer directement .env
+cp .env.example .env   
 
 # 2. Lancer tous les services
 docker compose up --build -d
@@ -46,7 +46,7 @@ docker compose ps
 
 ```
 dakar-monitoring/
-├── .env                        # Variables sensibles (ne pas committer)
+├── .env                        # Variables sensibles 
 ├── .gitignore
 ├── docker-compose.yml
 ├── producer/
